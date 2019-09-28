@@ -1,0 +1,20 @@
+{
+  "name": "liri-node-app",
+  "version": "1.0.0",
+  "description": "First assignment using node!",
+  "main": "liri.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noracbyrd/liri-node-app.git"
+  },
+  "keywords": [],
+  "author": "Nora Byrd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/noracbyrd/liri-node-app/issues"
+  },
+  "homepage": "https://github.com/noracbyrd/liri-node-app#readme"
+}
