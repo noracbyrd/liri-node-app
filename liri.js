@@ -27,11 +27,35 @@ let concertSearch = function () {
     let concertVenue;
     let concertLocation;
     let concertDate;
-
-
-
-   
-
+    axios.get("https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp")  
+    .then(function (response) {
+            for (var i in response.data){
+            console.log(response.data[i].venue.name);
+            console.log(response.data[i].venue.city);
+            // need to convert below via moment
+            console.log(response.data[i].datetime);
+            console.log("--------");
+            }
+    }).catch(function (error) {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log("---------------Data---------------");
+            console.log(error.response.data);
+            console.log("---------------Status---------------");
+            console.log(error.response.status);
+            console.log("---------------Status---------------");
+            console.log(error.response.headers);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an object that comes back with details pertaining to the error that occurred.
+            console.log(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+        }
+        console.log(error.config);
+    })
 
 }
 
@@ -41,7 +65,6 @@ let songSearch = function () {
     let songName;
     let songLink;
     let songAlbum;
-
 }
 
 // Function to search OMDB for movie information
@@ -59,6 +82,7 @@ let movieSearch = function () {
         console.log("The plot: " + response.data.Plot);
         console.log("Ratings: IMDB: " + response.data.imdbRating + "; Rotten Tomatoes: " + response.data.Ratings[1].Value);
         console.log("Country: " + response.data.Country);
+        // still need to include default case
     }).catch(function (error) {
         if (error.response) {
             // The request was made and the server responded with a status code
