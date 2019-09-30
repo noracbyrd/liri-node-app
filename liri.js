@@ -16,48 +16,87 @@ const axios = require("axios");
 
 // Variables to grab user search type and search value input
 let search = process.argv[2].toLowerCase().trim();
-let input = process.argv[3].toLowerCase().trim();
-
+let input = process.argv[3];
 
 
 // Functions for each Liri command case
 
 // Function to search Bands In Town for concert information
 let concertSearch = function () {
-    let concertVenue;
-    let concertLocation;
-    let concertDate;
-    axios.get("https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp")  
-    .then(function (response) {
-            for (var i in response.data){
-            console.log(response.data[i].venue.name);
-            console.log(response.data[i].venue.city);
-            // need to convert below via moment
-            console.log(response.data[i].datetime);
-            console.log("--------");
-            }
-    }).catch(function (error) {
-        if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log("---------------Data---------------");
-            console.log(error.response.data);
-            console.log("---------------Status---------------");
-            console.log(error.response.status);
-            console.log("---------------Status---------------");
-            console.log(error.response.headers);
-        } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an object that comes back with details pertaining to the error that occurred.
-            console.log(error.request);
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log("Error", error.message);
-        }
-        console.log(error.config);
-    })
+    switch (input) {
+        case undefined:
+            let artist = "Rick Astley";
+            axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp")
+                .then(function (response) {
+                    console.log("You didn't pick an artist so you get " + artist + ". This is why we can't have nice things!");
+                    console.log("--------");
+                    for (var i in response.data) {
+                        console.log(response.data[i].venue.name);
+                        console.log(response.data[i].venue.city);
+                        // need to convert below via moment
+                        console.log(response.data[i].datetime);
+                        console.log("--------");
+                    }
+                }).catch(function (error) {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        console.log("---------------Data---------------");
+                        console.log(error.response.data);
+                        console.log("---------------Status---------------");
+                        console.log(error.response.status);
+                        console.log("---------------Status---------------");
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an object that comes back with details pertaining to the error that occurred.
+                        console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log("Error", error.message);
+                    }
+                    console.log(error.config);
+                })
+            break;
+        default:
+            input.toLowerCase().trim();
+            axios.get("https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp")
+                .then(function (response) {
+                    console.log("Upcoming concert info for " + input + ":");
+                    console.log("--------");
+                    for (var i in response.data) {
+                        console.log(response.data[i].venue.name);
+                        console.log(response.data[i].venue.city);
+                        // need to convert below via moment
+                        console.log(response.data[i].datetime);
+                        console.log("--------");
+                    }
 
+                }).catch(function (error) {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        console.log("---------------Data---------------");
+                        console.log(error.response.data);
+                        console.log("---------------Status---------------");
+                        console.log(error.response.status);
+                        console.log("---------------Status---------------");
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an object that comes back with details pertaining to the error that occurred.
+                        console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log("Error", error.message);
+                    }
+                    console.log(error.config);
+                })
+            break;
+    }
 }
+
+
 
 // Function to search Spotify for song information
 let songSearch = function () {
@@ -72,8 +111,7 @@ let movieSearch = function () {
     // axios call to get the information we need about the movie
     axios.get("http://www.omdbapi.com/", {
         params: {
-            // hardcoding my API key now for testing
-            apikey: "1f6d3e5d",
+            apikey: keys.omdb.id,
             t: input,
         }
     }).then(function (response) {
