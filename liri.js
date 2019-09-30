@@ -2,10 +2,10 @@
 require("dotenv").config();
 const keys = require("./keys.js");
 const spotifyAPI = require('node-spotify-api');
-const spotify = new Spotify({
+const spotify = new spotifyAPI({
     id: keys.spotify.id,
     secret: keys.spotify.secret
-  });
+});
 
 
 // Including the fs package
@@ -107,10 +107,46 @@ let songSearch = function () {
     let songName;
     let songLink;
     let songAlbum;
-    switch(input) {
+    switch (input) {
         case undefined:
             let song = "Never Gonna Give You Up";
-
+            spotify
+                .search({ 
+                    type: 'track', 
+                    query: song,
+                    limit: 1, 
+                })
+                .then(function (response) {
+                    console.log("GOTCHA!");
+                    console.log("Artist: "+response.tracks.items[0].artists[0].name);
+                    console.log("Song Name: "+response.tracks.items[0].name);
+                    console.log("Song Preview Link: "+response.tracks.items[0].preview_url);
+                    console.log("Album Name: "+response.tracks.items[0].album.name);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+                break;
+                default:
+                    spotify
+                    .search({
+                        type: 'track',
+                        query: input,
+                        limit: 10,
+                    })
+                    .then(function (response) {
+                        for (var i in response.tracks.items) {
+                        console.log("Artist: "+response.tracks.items[i].artists[0].name);
+                    console.log("Song Name: "+response.tracks.items[i].name);
+                    console.log("Song Preview Link: "+response.tracks.items[i].preview_url);
+                    console.log("Album Name: "+response.tracks.items[i].album.name);
+                    console.log("--------");
+                        }
+                    })
+                    .catch(function (err){
+                        console.log(err);
+                    });
+                    break;
     }
 }
 
