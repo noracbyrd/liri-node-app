@@ -1,9 +1,12 @@
 // Including my secret API keys
 require("dotenv").config();
 const keys = require("./keys.js");
-// I don't quite understand how the below variables work
-//const spotify = new Spotify(keys.spotify);
-//const movies = new omdb(keys.omdb);
+const spotifyAPI = require('node-spotify-api');
+const spotify = new Spotify({
+    id: keys.spotify.id,
+    secret: keys.spotify.secret
+  });
+
 
 // Including the fs package
 const fs = require("fs");
@@ -104,6 +107,11 @@ let songSearch = function () {
     let songName;
     let songLink;
     let songAlbum;
+    switch(input) {
+        case undefined:
+            let song = "Never Gonna Give You Up";
+
+    }
 }
 
 // Function to search OMDB for movie information
