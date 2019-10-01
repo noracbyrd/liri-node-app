@@ -29,7 +29,7 @@ let concertSearch = function () {
     switch (input) {
         case undefined:
             let artist = "Rick Astley";
-            axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp")
+            axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id="+bandsintown.id+"")
                 .then(function (response) {
                     console.log("You didn't pick an artist so you get " + artist + ". This is why we can't have nice things!");
                     console.log("--------");
