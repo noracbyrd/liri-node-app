@@ -7,23 +7,13 @@ const spotify = new spotifyAPI({
     secret: keys.spotify.secret
 });
 
+// Including the packages relevant for Liri
 const inquirer = require("inquirer");
-
-// Including the fs package
 const fs = require("fs");
-
-// Including the Moment package
 var moment = require('moment');
-
-// Including the Axios package
 const axios = require("axios");
 
-// Variables to grab user search type and search value input
-// let search = process.argv[2].toLowerCase().trim();
-// let input = process.argv[3];
-
-// function to get user input wihtout argv
-
+// Generic error function so I don't have to type this a million times
 var getError = function (error) {
     if (error.response) {
         // The request was made and the server responded with a status code
@@ -45,16 +35,18 @@ var getError = function (error) {
     console.log(error.config);
 }
 
+// Function to log search results to a document called log.txt. This function will be called in the individual Liri functions below.
 var liriLog = function (newData) {
     fs.appendFile("log.txt", newData, function (err) {
         // If an error was experienced we will log it.
         if (err) {
             console.log(err);
         }
-        // If no error is experienced, we'll log the phrase "Content Added" to our node console.
-
+        // Omitting an 'added this' confirmation because it got excessive for the functions with loops.
     });
 }
+
+
 // Functions for each Liri command case
 
 // Function to search Bands In Town for concert information
