@@ -52,18 +52,23 @@ var liriLog = function (newData) {
 // Function to search Bands In Town for concert information
 let concertSearch = function (concert) {
     switch (concert) {
+        // Case for if the user doesn't enter anything:
         case "":
             let artist = "Rick Astley";
             axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=" + keys.bandsintown.id + "")
                 .then(function (response) {
+                    // Printing both to the console and to the Liri log text file:
                     console.log(`You didn't pick an artist so you get ${artist}. This is why we can't have nice things! \n ******** \n`);
                     liriLog(`Concert search results for ${artist}: \n ******** \n`);
+                    // For loop to print out the upcoming concert data:
                     for (var i in response.data) {
                         console.log(`${response.data[i].venue.name} \n ${response.data[i].venue.city} \n ${(moment(response.data[i].datetime).format("MM/DD/YYYY"))} \n --------`);
                         liriLog(`${response.data[i].venue.name} \n ${response.data[i].venue.city} \n ${(moment(response.data[i].datetime).format("MM/DD/YYYY"))} \n -------- \n`);
                     }
+                    // if there's an error, run the error function:
                 }).catch(getError);
             break;
+        // case for when the user enters an artist:
         default:
             axios.get("https://rest.bandsintown.com/artists/" + concert + "/events?app_id=codingbootcamp")
                 .then(function (response) {
@@ -84,8 +89,9 @@ let concertSearch = function (concert) {
 
 // Function to search Spotify for song information
 let songSearch = function (song) {
-
+// this follows the structure of the above concert function - data grabbed, data printed to console and Liri log etc etc
     switch (song) {
+        // case for if the user doesn't enter a song (are you sensing a theme here):
         case "":
             let songDefault = "Never Gonna Give You Up";
             spotify
@@ -100,6 +106,7 @@ let songSearch = function (song) {
                 })
                 .catch(getError);
             break;
+        // case for when the user enters a song:
         default:
             spotify
                 .search({
@@ -124,13 +131,14 @@ let songSearch = function (song) {
 
 // Function to search OMDB for movie information
 let movieSearch = function (movie) {
-
-    // axios call to get the information we need about the movie
+// follows previous function format like song search and concert search
     switch (movie) {
+        // case for if the user doesn't enter a movie
         case "":
             axios.get("http://www.omdbapi.com/", {
                 params: {
                     apikey: keys.omdb.id,
+                    // yes, reader, there is an omdb entry for Never Gonna Give You Up's music video:
                     t: "Rick Astley: Never Gonna Give You Up",
                 }
             }).then(function (response) {
@@ -139,6 +147,7 @@ let movieSearch = function (movie) {
             }).catch(getError);
             break;
         default:
+        // case for when user enters a movie to search
             axios.get("http://www.omdbapi.com/", {
                 params: {
                     apikey: keys.omdb.id,
@@ -152,14 +161,17 @@ let movieSearch = function (movie) {
     }
 }
 
+// Function for reading instructions from the random.txt file and following them
 let theThing = function (text) {
     fs.readFile(text, "utf8", function (error, data) {
         if (error) {
             getError;
         }
-        console.log(data);
         var randomLiri = data.split(",");
+        //I know there's only two files in the random txt file, so I can deconstruct it as follows:
         var [randomLiriCommand, randomLiriSearch] = randomLiri;
+        // switch case to account for the possible Liri commands:
+        // I'm kiiiind of copping out with the default below, but needed to account for if the file was somehow not in the format above
         switch (randomLiriCommand) {
             case "concert-this":
                 concertSearch(randomLiriSearch);
@@ -170,6 +182,8 @@ let theThing = function (text) {
             case "movie-this":
                 movieSearch(randomLiriSearch);
                 break;
+            default:
+                console.log("There wasn't a Liri command to follow!");
         }
     })
 }
