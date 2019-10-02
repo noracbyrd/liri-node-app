@@ -88,14 +88,14 @@ let concertSearch = function (concert) {
 
 // Function to search Spotify for song information
 let songSearch = function (song) {
-// this follows the structure of the above concert function - data grabbed, data printed to console and Liri log etc etc
+    // this follows the structure of the above concert function - data grabbed, data printed to console and Liri log etc etc
     switch (song) {
         // case for if the user doesn't enter a song (are you sensing a theme here):
         case "":
             let songDefault = "Never Gonna Give You Up";
             // using special Spotify node package
             spotify
-            // for the default case, we're only returning one result
+                // for the default case, we're only returning one result
                 .search({
                     type: 'track',
                     query: songDefault,
@@ -111,7 +111,7 @@ let songSearch = function (song) {
         // case for when the user enters a song:
         default:
             spotify
-            // returning five songs for a user search since I was offended when the first answer returned when searching God Only Knows was NOT the Beach Boys
+                // returning five songs for a user search since I was offended when the first answer returned when searching God Only Knows was NOT the Beach Boys
                 .search({
                     type: 'track',
                     query: song,
@@ -134,7 +134,7 @@ let songSearch = function (song) {
 
 // Function to search OMDB for movie information
 let movieSearch = function (movie) {
-// follows previous function format like song search and concert search
+    // follows previous function format like song search and concert search
     switch (movie) {
         // case for if the user doesn't enter a movie
         case "":
@@ -151,8 +151,8 @@ let movieSearch = function (movie) {
             }).catch(getError);
             break;
         default:
-        // case for when user enters a movie to search
-        // axios call for the OMDB
+            // case for when user enters a movie to search
+            // axios call for the OMDB
             axios.get("http://www.omdbapi.com/", {
                 params: {
                     apikey: keys.omdb.id,
@@ -169,30 +169,39 @@ let movieSearch = function (movie) {
 
 // Function for reading instructions from the random.txt file and following the instructions
 let theThing = function (text) {
-    fs.readFile(text, "utf8", function (error, data) {
-        if (error) {
-            getError;
-        }
-        var randomLiri = data.split(",");
-        //I know there's only two files in the random txt file, so I can deconstruct it as follows:
-        var [randomLiriCommand, randomLiriSearch] = randomLiri;
-        // switch case to account for the possible Liri commands:
-        switch (randomLiriCommand) {
-            // depending on what the command is from the text file, we'll use the second item in the text file as the argument for the function we're running
-            case "concert-this":
-                concertSearch(randomLiriSearch);
-                break;
-            case "spotify-this-song":
-                songSearch(randomLiriSearch);
-                break;
-            case "movie-this":
-                movieSearch(randomLiriSearch);
-                break;
-            // I'm kiiiind of copping out with the default below, but needed to account for if the info in the file was somehow not in the expected format above
-            default:
-                console.log("There wasn't a Liri command to follow!");
-        }
-    })
+    switch (text) {
+        // if the user doesn't enter any file name
+        case "":
+            console.log("You need to enter a file!");
+            break;
+        // user entered an extant file name:
+        default:
+            fs.readFile(text, "utf8", function (error, data) {
+                if (error) {
+                    getError;
+                }
+                var randomLiri = data.split(",");
+                //I know there's only two files in the random txt file, so I can deconstruct it as follows:
+                var [randomLiriCommand, randomLiriSearch] = randomLiri;
+                // switch case to account for the possible Liri commands:
+                switch (randomLiriCommand) {
+                    // depending on what the command is from the text file, we'll use the second item in the text file as the argument for the function we're running
+                    case "concert-this":
+                        concertSearch(randomLiriSearch);
+                        break;
+                    case "spotify-this-song":
+                        songSearch(randomLiriSearch);
+                        break;
+                    case "movie-this":
+                        movieSearch(randomLiriSearch);
+                        break;
+                    // I'm kiiiind of copping out with the default below, but needed to account for if the info in the file was somehow not in the expected format above
+                    default:
+                        console.log("There wasn't a Liri command to follow!");
+                }
+            })
+            break;
+    }
 }
 
 // getting user input to actually run Liri
@@ -214,7 +223,6 @@ inquirer
         },
     ]).then(function (inquirerResponse) {
         // Switch cases for the various Liri commands - each case calls the corresponding function
-        console.log(typeof inquirerResponse.liriCommand);
         switch (inquirerResponse.liriCommand) {
             case "concert-this":
                 concertSearch(inquirerResponse.input);
@@ -231,4 +239,4 @@ inquirer
         }
     });
 
-
+// link to my profile: https://noracbyrd.github.io/Bootstrap_Portfolio/portfolio.html
