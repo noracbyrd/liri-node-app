@@ -1,8 +1,3 @@
-# liri-node-app
-First assignment using node!
-Project link:
-https://github.com/noracbyrd/liri-node-app 
-
 # Liri! 
 
 ### Overview
